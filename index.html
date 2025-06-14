@@ -146,7 +146,7 @@
         
         .future-vision-slider {
             width: 100%;
-            height: 200px;
+            height: 400px;
             margin: 20px 0;
             position: relative;
             border-radius: 12px;
@@ -169,9 +169,10 @@
             left: 0;
             opacity: 0;
             transition: opacity 0.8s ease-in-out;
-            background-size: cover;
+            background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
+            background-color: #f8f9fa;
         }
         
         .slide.active {
@@ -219,12 +220,24 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
             color: white;
-            padding: 20px 15px 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 30px 20px 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
             text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .future-vision-slider {
+                height: 300px;
+            }
+            
+            .slide-caption {
+                font-size: 0.9rem;
+                padding: 20px 15px 10px;
+            }
         }
         
         .timeline-header {
@@ -760,6 +773,15 @@
             
             .change-multiplier {
                 font-size: 1.4rem;
+            }
+            
+            .future-vision-slider {
+                height: 300px;
+            }
+            
+            .slide-caption {
+                font-size: 0.9rem;
+                padding: 20px 15px 10px;
             }
         }
     </style>
