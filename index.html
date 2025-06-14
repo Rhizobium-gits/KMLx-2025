@@ -7,12 +7,88 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
         
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             margin: 0;
             font-family: 'Noto Sans JP', sans-serif;
             background: #ffffff;
             color: #2c2c2c;
             line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes progressBar {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(40, 167, 69, 0.6);
+            }
         }
         
         .poster {
@@ -25,6 +101,36 @@
             box-sizing: border-box;
             background: #ffffff;
             position: relative;
+            overflow: hidden;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-pixel {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(40, 167, 69, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-pixel:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .floating-pixel:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-pixel:nth-child(3) { top: 60%; left: 8%; animation-delay: 2s; }
+        .floating-pixel:nth-child(4) { bottom: 20%; right: 15%; animation-delay: 3s; }
+        .floating-pixel:nth-child(5) { bottom: 40%; left: 12%; animation-delay: 4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.6; }
         }
         
         .header {
@@ -32,6 +138,92 @@
             margin-bottom: 40px;
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 30px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 25px;
+            gap: 30px;
+        }
+        
+        .timeline-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .current-point .year-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .future-point .year-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 5px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+        
+        .current-point .status-label {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .future-point .status-label {
+            background: #dc3545;
+            color: white;
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        .timeline-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .arrow-line {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #6c757d, #dc3545);
+            position: relative;
+            animation: progressBar 3s ease-in-out infinite;
+        }
+        
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #dc3545;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .arrow-text {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 8px;
+            font-weight: 500;
         }
         
         .main-title {
@@ -61,14 +253,65 @@
             border-radius: 8px;
             padding: 25px;
             margin: 30px 0;
+            position: relative;
+            z-index: 2;
+            animation: slideInLeft 1s ease-out 0.3s both;
+            overflow: hidden;
+        }
+        
+        .disaster-forecast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(40, 167, 69, 0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
         
         .forecast-title {
             font-size: 1.4rem;
             font-weight: 500;
             color: #2c2c2c;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
+            line-height: 1.3;
+        }
+        
+        .change-multiplier {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #dc3545;
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s ease-in-out infinite;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .change-subtitle {
+            font-size: 1rem;
+            color: #495057;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .change-indicator {
+            position: relative;
         }
         
         .disaster-grid {
@@ -84,6 +327,68 @@
             border-radius: 6px;
             padding: 15px;
             text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .disaster-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: #28a745;
+        }
+        
+        .disaster-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #dc3545, #ffc107, #28a745);
+            animation: progressBar 2s ease-out;
+            animation-delay: calc(var(--delay, 0) * 0.2s);
+        }
+        
+        .change-comparison {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        
+        .current-value {
+            color: #28a745;
+            font-weight: 500;
+        }
+        
+        .arrow {
+            color: #ffc107;
+            font-weight: 700;
+            margin: 0 4px;
+        }
+        
+        .future-value {
+            color: #dc3545;
+            font-weight: 700;
+        }
+        
+        .increase-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .increase-badge.new-threat {
+            background: #6f42c1;
+            animation: glow 2s ease-in-out infinite;
         }
         
         .disaster-type {
@@ -132,6 +437,16 @@
             text-align: center;
             border-bottom: 1px solid #dee2e6;
             padding-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .timeline-emphasis {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 5px;
+            animation: pulse 2s ease-in-out infinite;
         }
         
         .comparison-grid {
@@ -172,6 +487,31 @@
             background: #f8f9fa;
             border-radius: 4px;
             border-left: 3px solid #6c757d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-item:hover {
+            transform: translateX(5px);
+            background: #e9ecef;
+        }
+        
+        .metric-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: rgba(40, 167, 69, 0.1);
+            transition: width 0.5s ease;
+            z-index: -1;
+        }
+        
+        .metric-item:hover::before {
+            width: 100%;
         }
         
         .current .metric-item {
@@ -262,6 +602,37 @@
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #dee2e6;
+            position: relative;
+            animation: fadeInUp 1s ease-out 1.6s both;
+        }
+        
+        .references::before {
+            content: '📚';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            font-size: 1.2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .interactive-tooltip {
+            position: absolute;
+            background: rgba(44, 44, 44, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            max-width: 200px;
+            line-height: 1.4;
+        }
+        
+        .tooltip-trigger:hover + .interactive-tooltip,
+        .tooltip-trigger:hover .interactive-tooltip {
+            opacity: 1;
         }
         
         .references-title {
@@ -294,63 +665,122 @@
 </head>
 <body>
     <div class="poster">
+        <div class="floating-elements">
+            <div class="floating-pixel"></div>
+            <div class="floating-pixel"></div>
+            <div class="floating-pixel"></div>
+            <div class="floating-pixel"></div>
+            <div class="floating-pixel"></div>
+        </div>
+        
         <div class="header">
-            <h1 class="main-title">東京都市分散化による災害リスク軽減効果の定量分析</h1>
+            <h1 class="main-title">東京都市分散化(苔型社会)による災害リスク軽減効果の定量分析</h1>
             <p class="subtitle">ピクセル型都市構造モデルによる防災効果評価</p>
-            <p class="research-info">2100年気候変動シナリオに基づく研究</p>
+            <div class="timeline-header">
+                <div class="timeline-point current-point">
+                    <div class="year-label">2025年</div>
+                    <div class="status-label">現在</div>
+                </div>
+                <div class="timeline-arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-text">75年後</div>
+                </div>
+                <div class="timeline-point future-point">
+                    <div class="year-label">2100年</div>
+                    <div class="status-label">予測</div>
+                </div>
+            </div>
         </div>
         
         <div class="disaster-forecast">
-            <h2 class="forecast-title">2100年東京都 年間災害発生予測</h2>
+            <div class="change-indicator">
+                <h2 class="forecast-title">
+                    <span class="change-multiplier">現在の3-4倍</span>
+                    <br>2100年東京都 年間災害発生予測
+                </h2>
+                <div class="change-subtitle">現在：年間15-20回 → 2100年：年間50-80回</div>
+            </div>
             <div class="disaster-grid">
-                <div class="disaster-item">
+                <div class="disaster-item tooltip-trigger" style="--delay: 1;" onmouseover="showTooltip(event, '現在：年2-3回 → 2100年：年5-7回（約2-3倍増加）台風の強度が現在より30-50%増加し、年間5-7回の被害が予想されます')" onmouseout="hideTooltip()">
                     <div class="disaster-type">台風関連災害</div>
+                    <div class="change-comparison">
+                        <span class="current-value">現在: 2-3回</span>
+                        <span class="arrow">→</span>
+                        <span class="future-value">5-7回</span>
+                    </div>
                     <div class="disaster-count">5-7</div>
                     <div class="disaster-unit">回/年</div>
+                    <div class="increase-badge">+167%</div>
                 </div>
-                <div class="disaster-item">
+                <div class="disaster-item tooltip-trigger" style="--delay: 2;" onmouseover="showTooltip(event, '現在：年3-4回 → 2100年：年8-12回（約3倍増加）短時間強雨の頻度が現在の2-3倍に増加する予測です')" onmouseout="hideTooltip()">
                     <div class="disaster-type">豪雨・洪水災害</div>
+                    <div class="change-comparison">
+                        <span class="current-value">現在: 3-4回</span>
+                        <span class="arrow">→</span>
+                        <span class="future-value">8-12回</span>
+                    </div>
                     <div class="disaster-count">8-12</div>
                     <div class="disaster-unit">回/年</div>
+                    <div class="increase-badge">+200%</div>
                 </div>
-                <div class="disaster-item">
+                <div class="disaster-item tooltip-trigger" style="--delay: 3;" onmouseover="showTooltip(event, '現在：年5-10日 → 2100年：年30-50日（約5倍増加）最高気温44℃超の日が年間30-50日発生し、熱中症リスクが急増します')" onmouseout="hideTooltip()">
                     <div class="disaster-type">猛暑関連災害</div>
+                    <div class="change-comparison">
+                        <span class="current-value">現在: 5-10日</span>
+                        <span class="arrow">→</span>
+                        <span class="future-value">30-50日</span>
+                    </div>
                     <div class="disaster-count">30-50</div>
                     <div class="disaster-unit">日/年</div>
+                    <div class="increase-badge">+400%</div>
                 </div>
-                <div class="disaster-item">
+                <div class="disaster-item tooltip-trigger" style="--delay: 4;" onmouseover="showTooltip(event, '現在：年0-1回 → 2100年：年2-4回（新たな脅威）海面上昇0.7mにより、高潮被害が頻発化します')" onmouseout="hideTooltip()">
                     <div class="disaster-type">高潮・海面上昇</div>
+                    <div class="change-comparison">
+                        <span class="current-value">現在: 0-1回</span>
+                        <span class="arrow">→</span>
+                        <span class="future-value">2-4回</span>
+                    </div>
                     <div class="disaster-count">2-4</div>
                     <div class="disaster-unit">回/年</div>
+                    <div class="increase-badge new-threat">新規</div>
                 </div>
             </div>
             <div class="total-summary">
-                <div class="total-text">総災害発生頻度：年間50-80回（週1-2回ペース）</div>
+                <div class="total-text">
+                    <span class="dramatic-change">劇的変化：</span>
+                    現在 年間15-20回 → 2100年 年間50-80回
+                    <br>
+                    <span class="frequency-impact">週1-2回ペースで災害が発生する未来</span>
+                </div>
             </div>
         </div>
         
         <div class="comparison-section">
-            <h2 class="section-title">都市構造による災害被害比較分析</h2>
+            <h2 class="section-title">
+                <span class="timeline-emphasis">75年間の変化</span>
+                都市構造による災害被害比較分析
+            </h2>
             <div class="comparison-grid">
                 <div class="city-type current">
                     <h3 class="city-title">現行密集型都市構造</h3>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '密集市街地での建物倒壊と避難困難による被害')" onmouseout="hideTooltip()">
                         <span class="metric-label">想定死者数</span>
                         <span class="metric-value">10,000人</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '連鎖倒壊により広範囲での建物被害が発生')" onmouseout="hideTooltip()">
                         <span class="metric-label">建物被害率</span>
                         <span class="metric-value">85%</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '関東大震災レベルの大規模延焼が発生')" onmouseout="hideTooltip()">
                         <span class="metric-label">火災延焼面積</span>
                         <span class="metric-value">2,400ha</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '東日本大震災の約5倍の経済損失')" onmouseout="hideTooltip()">
                         <span class="metric-label">経済損失</span>
                         <span class="metric-value">95兆円</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, 'インフラ復旧の複雑さにより長期化')" onmouseout="hideTooltip()">
                         <span class="metric-label">復旧期間</span>
                         <span class="metric-value">10年</span>
                     </div>
@@ -358,23 +788,23 @@
                 
                 <div class="city-type pixel">
                     <h3 class="city-title">ピクセル型分散都市構造</h3>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '避難経路確保と分散配置による被害軽減')" onmouseout="hideTooltip()">
                         <span class="metric-label">想定死者数</span>
                         <span class="metric-value">3,500人</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '連鎖倒壊防止により被害を局所化')" onmouseout="hideTooltip()">
                         <span class="metric-label">建物被害率</span>
                         <span class="metric-value">45%</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '緑地による自然防火帯で延焼阻止')" onmouseout="hideTooltip()">
                         <span class="metric-label">火災延焼面積</span>
                         <span class="metric-value">240ha</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, 'インフラ分散により損失を大幅削減')" onmouseout="hideTooltip()">
                         <span class="metric-label">経済損失</span>
                         <span class="metric-value">42兆円</span>
                     </div>
-                    <div class="metric-item">
+                    <div class="metric-item tooltip-trigger" onmouseover="showTooltip(event, '自立型クラスターにより迅速復旧')" onmouseout="hideTooltip()">
                         <span class="metric-label">復旧期間</span>
                         <span class="metric-value">4年</span>
                     </div>
@@ -385,19 +815,19 @@
         <div class="improvement-section">
             <h2 class="section-title">ピクセル化による災害リスク削減効果</h2>
             <div class="improvement-grid">
-                <div class="improvement-item">
+                <div class="improvement-item tooltip-trigger" style="--delay: 1;" onmouseover="showTooltip(event, '避難経路改善と救助アクセス向上による効果')" onmouseout="hideTooltip()">
                     <div class="improvement-number">65%</div>
                     <div class="improvement-label">人的被害削減率</div>
                 </div>
-                <div class="improvement-item">
+                <div class="improvement-item tooltip-trigger" style="--delay: 2;" onmouseover="showTooltip(event, '連鎖倒壊防止により建物被害を大幅軽減')" onmouseout="hideTooltip()">
                     <div class="improvement-number">47%</div>
                     <div class="improvement-label">建物被害削減率</div>
                 </div>
-                <div class="improvement-item">
+                <div class="improvement-item tooltip-trigger" style="--delay: 3;" onmouseover="showTooltip(event, '緑地帯による防火効果で劇的な改善')" onmouseout="hideTooltip()">
                     <div class="improvement-number">90%</div>
                     <div class="improvement-label">火災被害削減率</div>
                 </div>
-                <div class="improvement-item">
+                <div class="improvement-item tooltip-trigger" style="--delay: 4;" onmouseover="showTooltip(event, '分散型インフラにより復旧コストを大幅削減')" onmouseout="hideTooltip()">
                     <div class="improvement-number">56%</div>
                     <div class="improvement-label">経済損失削減率</div>
                 </div>
@@ -422,6 +852,72 @@
                 • 地震調査研究推進本部地震調査委員会評価（2025年1月） • 国際防災研究データベース（EM-DAT）
             </p>
         </div>
+        
+        <div class="interactive-tooltip" id="tooltip"></div>
+        
+        <script>
+            // カウントアップアニメーション
+            function animateCountUp(element, target, duration = 1000) {
+                const start = 0;
+                const startTime = performance.now();
+                
+                function updateCount(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(start + (target * easeOutQuart));
+                    
+                    element.textContent = current + (target % 1 === 0 ? '' : '%');
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        element.textContent = target + (element.textContent.includes('%') ? '%' : '');
+                    }
+                }
+                
+                requestAnimationFrame(updateCount);
+            }
+            
+            // ツールチップ機能
+            function showTooltip(event, text) {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.textContent = text;
+                tooltip.style.opacity = '1';
+                tooltip.style.left = (event.pageX + 10) + 'px';
+                tooltip.style.top = (event.pageY - 10) + 'px';
+            }
+            
+            function hideTooltip() {
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.opacity = '0';
+            }
+            
+            // 数値をアニメーション化
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(() => {
+                    const numbers = document.querySelectorAll('.disaster-count, .improvement-number');
+                    numbers.forEach((num, index) => {
+                        setTimeout(() => {
+                            const text = num.textContent;
+                            const value = parseInt(text.replace(/[^0-9]/g, ''));
+                            if (value) animateCountUp(num, value, 1200);
+                        }, index * 200);
+                    });
+                }, 500);
+            });
+            
+            // ホバーエフェクト強化
+            document.querySelectorAll('.disaster-item, .improvement-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
